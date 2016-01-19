@@ -276,7 +276,7 @@
     [self.framingView addConstraint:blueSquareThreeXPosition];
     [self.framingView addConstraint:blueSquareThreeYPosition];
     
-    // Positioning the Red boxes
+    // Red box
     
     UIView *redRectangle = [[UIView alloc] initWithFrame:CGRectZero];
     redRectangle.translatesAutoresizingMaskIntoConstraints = NO;
@@ -318,6 +318,90 @@
     [self.framingView addConstraint:redRectangleHeight];
     [self.framingView addConstraint:redRectangleTop];
     [self.framingView addConstraint:redRectangleRight];
+    
+    // Orange Boxes within Red box
+    
+    UIView *orangeRectangleOne = [[UIView alloc] initWithFrame:CGRectZero];
+    orangeRectangleOne.translatesAutoresizingMaskIntoConstraints = NO;
+    orangeRectangleOne.backgroundColor = [UIColor orangeColor];
+    [redRectangle addSubview:orangeRectangleOne];
+    
+    NSLayoutConstraint *orangeRectangleOneWidth = [NSLayoutConstraint constraintWithItem:orangeRectangleOne
+                                                                         attribute:NSLayoutAttributeWidth
+                                                                         relatedBy:NSLayoutRelationEqual
+                                                                            toItem:redRectangle
+                                                                         attribute:NSLayoutAttributeWidth
+                                                                        multiplier:0.47
+                                                                          constant:0];
+    
+    NSLayoutConstraint *orangeRectangleOneHeight = [NSLayoutConstraint constraintWithItem:orangeRectangleOne
+                                                                          attribute:NSLayoutAttributeHeight
+                                                                          relatedBy:NSLayoutRelationEqual
+                                                                             toItem:nil
+                                                                          attribute:NSLayoutAttributeNotAnAttribute
+                                                                         multiplier:1.0
+                                                                           constant:30.0];
+    
+    NSLayoutConstraint *orangeRectangleOneTop = [NSLayoutConstraint constraintWithItem:orangeRectangleOne
+                                                                       attribute:NSLayoutAttributeTop
+                                                                       relatedBy:NSLayoutRelationEqual
+                                                                          toItem:redRectangle
+                                                                       attribute:NSLayoutAttributeTop
+                                                                      multiplier:1.0
+                                                                        constant:10];
+    
+    NSLayoutConstraint *orangeRectangleOneLeft = [NSLayoutConstraint constraintWithItem:orangeRectangleOne
+                                                                         attribute:NSLayoutAttributeLeft
+                                                                         relatedBy:NSLayoutRelationEqual
+                                                                            toItem:redRectangle
+                                                                         attribute:NSLayoutAttributeLeft
+                                                                        multiplier:1.0
+                                                                          constant:10];
+    [redRectangle addConstraint:orangeRectangleOneWidth];
+    [redRectangle addConstraint:orangeRectangleOneHeight];
+    [redRectangle addConstraint:orangeRectangleOneTop];
+    [redRectangle addConstraint:orangeRectangleOneLeft];
+    
+    UIView *orangeRectangleTwo = [[UIView alloc] initWithFrame:CGRectZero];
+    orangeRectangleTwo.translatesAutoresizingMaskIntoConstraints = NO;
+    orangeRectangleTwo.backgroundColor = [UIColor orangeColor];
+    [redRectangle addSubview:orangeRectangleTwo];
+    
+    NSLayoutConstraint *orangeRectangleTwoWidth = [NSLayoutConstraint constraintWithItem:orangeRectangleTwo
+                                                                               attribute:NSLayoutAttributeWidth
+                                                                               relatedBy:NSLayoutRelationEqual
+                                                                                  toItem:redRectangle
+                                                                               attribute:NSLayoutAttributeWidth
+                                                                              multiplier:0.33
+                                                                                constant:0];
+    
+    NSLayoutConstraint *orangeRectangleTwoHeight = [NSLayoutConstraint constraintWithItem:orangeRectangleTwo
+                                                                                attribute:NSLayoutAttributeHeight
+                                                                                relatedBy:NSLayoutRelationEqual
+                                                                                   toItem:nil
+                                                                                attribute:NSLayoutAttributeNotAnAttribute
+                                                                               multiplier:1.0
+                                                                                 constant:30.0];
+    
+    NSLayoutConstraint *orangeRectangleTwoTop = [NSLayoutConstraint constraintWithItem:orangeRectangleTwo
+                                                                          attribute:NSLayoutAttributeTop
+                                                                          relatedBy:NSLayoutRelationEqual
+                                                                             toItem:redRectangle
+                                                                          attribute:NSLayoutAttributeTop
+                                                                         multiplier:1.0
+                                                                           constant:10];
+    
+    NSLayoutConstraint *orangeRectangleTwoLeft = [NSLayoutConstraint constraintWithItem:orangeRectangleTwo
+                                                                           attribute:NSLayoutAttributeRight
+                                                                           relatedBy:NSLayoutRelationEqual
+                                                                              toItem:redRectangle
+                                                                           attribute:NSLayoutAttributeRight
+                                                                          multiplier:1.0
+                                                                            constant:-10];
+    [redRectangle addConstraint:orangeRectangleTwoWidth];
+    [redRectangle addConstraint:orangeRectangleTwoHeight];
+    [redRectangle addConstraint:orangeRectangleTwoTop];
+    [redRectangle addConstraint:orangeRectangleTwoLeft];
     
 }
 
