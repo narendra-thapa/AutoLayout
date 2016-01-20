@@ -507,7 +507,7 @@
 }
 
 - (void)showHideYellowRectangle:(id)sender {
-    if ((self.yellowCounter % 2) == 0) {
+    if ((self.yellowCounter % 2) != 0) {
         
         self.yellowRectangleBottom.constant = 150;
         self.blueSquareTwoYPosition.constant = 0;
@@ -520,13 +520,13 @@
         }];
         self.yellowRectangle.hidden = YES;
         self.yellowCounter++;
+        
     } else {
-        
-        
         self.yellowRectangleBottom.constant = 0;
+        if (self.framingViewHeight.constant != 300.0) {
         self.blueSquareTwoYPosition.constant = -37.5;
         self.blueSquareOneYPosition.constant = -75;
-        self.blueSquareThreeYPosition.constant = -112.5;
+            self.blueSquareThreeYPosition.constant = -112.5;}
         NSLog(@"No");
 //        [self.view layoutIfNeeded];
         [UIView animateWithDuration:1 animations:^{
