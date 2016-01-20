@@ -14,13 +14,37 @@
 @property (nonatomic, weak) UIButton *  portraitButton;
 @property (nonatomic, weak) UIButton *  landscapeButton;
 
+@property (nonatomic, weak) UIButton *  yellowButton;
+@property (nonatomic) NSUInteger yellowCounter;
+@property (nonatomic) UIView *yellowRectangle;
+
+@property (nonatomic) NSLayoutConstraint *purpleRectangleBottom;
+
+
+@property (nonatomic) UIView *purpleRectangle;
+@property (nonatomic) NSLayoutConstraint *yellowRectangleBottom;
+
+@property (nonatomic) NSLayoutConstraint *blueSquareOneYPosition;
+@property (nonatomic) NSLayoutConstraint *blueSquareTwoYPosition;
+@property (nonatomic) NSLayoutConstraint *blueSquareThreeYPosition;
+
 @property (nonatomic, weak) UIView *                framingView;
 @property (nonatomic, weak) NSLayoutConstraint *    framingViewHeight;
 @property (nonatomic, weak) NSLayoutConstraint *    framingViewWidth;
 
+
 @end
 
 @implementation LPAViewController
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _yellowCounter = 0;
+    }
+    return self;
+}
 
 - (void)viewDidLoad
 {
@@ -47,17 +71,28 @@
     landscapeButton.translatesAutoresizingMaskIntoConstraints = NO;
     self.landscapeButton = landscapeButton;
     
+    UIButton *yellowButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [yellowButton setTitle:@"Show/Hide Yellow" forState:UIControlStateNormal];
+    [yellowButton addTarget:self action:@selector(showHideYellowRectangle:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:yellowButton];
+    yellowButton.translatesAutoresizingMaskIntoConstraints = NO;
+    self.yellowButton = yellowButton;
+    
+
+
+
     UIView *framingView = [[UIView alloc] initWithFrame:CGRectZero];
     framingView.translatesAutoresizingMaskIntoConstraints = NO;
     framingView.backgroundColor = [UIColor greenColor];
     [self.view addSubview:framingView];
     self.framingView = framingView;
     
-    NSString *buttonsHorizontalConstraints = @"|[squareButton(==portraitButton)][portraitButton(==landscapeButton)][landscapeButton]|";
+    NSString *buttonsHorizontalConstraints = @"|[squareButton(==portraitButton)][portraitButton(==landscapeButton)][landscapeButton(==yellowButton)][yellowButton]|";
+    
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:buttonsHorizontalConstraints
                                                                       options:NSLayoutFormatAlignAllCenterY
                                                                       metrics:nil
-                                                                        views:NSDictionaryOfVariableBindings(squareButton, portraitButton, landscapeButton)]];
+                                                                        views:NSDictionaryOfVariableBindings(squareButton, portraitButton, landscapeButton, yellowButton)]];
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:squareButton
                                                           attribute:NSLayoutAttributeBottom
@@ -105,14 +140,57 @@
     self.framingViewHeight = framingViewHeight;
     self.framingViewWidth = framingViewWidth;
     
+    // Yello Rectangle
+    self.yellowRectangle = [[UIView alloc] initWithFrame:CGRectZero];
+    self.yellowRectangle.translatesAutoresizingMaskIntoConstraints = NO;
+    self.yellowRectangle.backgroundColor = [UIColor yellowColor];
+    [self.framingView addSubview:self.yellowRectangle];
+    self.yellowRectangle.hidden = YES;
+    
+    NSLayoutConstraint *yellowRectangleWidth = [NSLayoutConstraint constraintWithItem:self.yellowRectangle
+                                                                            attribute:NSLayoutAttributeWidth
+                                                                            relatedBy:NSLayoutRelationEqual
+                                                                               toItem:self.framingView
+                                                                            attribute:NSLayoutAttributeWidth
+                                                                           multiplier:1
+                                                                             constant:0];
+    
+    NSLayoutConstraint *yellowRectangleHeight = [NSLayoutConstraint constraintWithItem:self.yellowRectangle
+                                                                             attribute:NSLayoutAttributeHeight
+                                                                             relatedBy:NSLayoutRelationEqual
+                                                                                toItem:nil
+                                                                             attribute:NSLayoutAttributeNotAnAttribute
+                                                                            multiplier:1.0
+                                                                              constant:150.0];
+    
+    self.yellowRectangleBottom = [NSLayoutConstraint constraintWithItem:self.yellowRectangle
+                                                                             attribute:NSLayoutAttributeBottom
+                                                                             relatedBy:NSLayoutRelationEqual
+                                                                                toItem:self.framingView
+                                                                             attribute:NSLayoutAttributeBottom
+                                                                            multiplier:1.0
+                                                                              constant:150];
+    
+    NSLayoutConstraint *yellowRectangleLeft = [NSLayoutConstraint constraintWithItem:self.yellowRectangle
+                                                                           attribute:NSLayoutAttributeLeft
+                                                                           relatedBy:NSLayoutRelationEqual
+                                                                              toItem:self.framingView
+                                                                           attribute:NSLayoutAttributeLeft
+                                                                          multiplier:1.0
+                                                                            constant:0];
+    [self.framingView addConstraint:yellowRectangleWidth];
+    [self.framingView addConstraint:yellowRectangleHeight];
+    [self.framingView addConstraint:self.yellowRectangleBottom];
+    [self.framingView addConstraint:yellowRectangleLeft];
+    
     // Purple Rectangle
     
-    UIView *purpleRectangle = [[UIView alloc] initWithFrame:CGRectZero];
-    purpleRectangle.translatesAutoresizingMaskIntoConstraints = NO;
-    purpleRectangle.backgroundColor = [UIColor purpleColor];
-    [self.framingView addSubview:purpleRectangle];
+    self.purpleRectangle = [[UIView alloc] initWithFrame:CGRectZero];
+    self.purpleRectangle.translatesAutoresizingMaskIntoConstraints = NO;
+    self.purpleRectangle.backgroundColor = [UIColor purpleColor];
+    [self.framingView addSubview:self.purpleRectangle];
     
-    NSLayoutConstraint *purpleRectangleWidth = [NSLayoutConstraint constraintWithItem:purpleRectangle
+    NSLayoutConstraint *purpleRectangleWidth = [NSLayoutConstraint constraintWithItem:self.purpleRectangle
                                                                         attribute:NSLayoutAttributeWidth
                                                                         relatedBy:NSLayoutRelationEqual
                                                                            toItem:self.framingView
@@ -120,7 +198,7 @@
                                                                        multiplier:0.61
                                                                              constant:0];
     
-    NSLayoutConstraint *purpleRectangleHeight = [NSLayoutConstraint constraintWithItem:purpleRectangle
+    NSLayoutConstraint *purpleRectangleHeight = [NSLayoutConstraint constraintWithItem:self.purpleRectangle
                                                                          attribute:NSLayoutAttributeHeight
                                                                          relatedBy:NSLayoutRelationEqual
                                                                             toItem:nil
@@ -128,15 +206,15 @@
                                                                         multiplier:1.0
                                                                           constant:50.0];
     
-    NSLayoutConstraint *purpleRectangleBottom = [NSLayoutConstraint constraintWithItem:purpleRectangle
+    self.purpleRectangleBottom = [NSLayoutConstraint constraintWithItem:self.purpleRectangle
                                                                              attribute:NSLayoutAttributeBottom
                                                                              relatedBy:NSLayoutRelationEqual
-                                                                                toItem:self.framingView
+                                                                                toItem:self.yellowRectangle
                                                                              attribute:NSLayoutAttributeBottom
                                                                             multiplier:1.0
-                                                                              constant:-20];
-    
-    NSLayoutConstraint *purpleRectangleRight = [NSLayoutConstraint constraintWithItem:purpleRectangle
+                                                                              constant:-170];
+
+    NSLayoutConstraint *purpleRectangleRight = [NSLayoutConstraint constraintWithItem:self.purpleRectangle
                                                                              attribute:NSLayoutAttributeRight
                                                                              relatedBy:NSLayoutRelationEqual
                                                                                 toItem:self.framingView
@@ -147,7 +225,7 @@
     [self.framingView addConstraint:purpleRectangleWidth];
     [self.framingView addConstraint:purpleRectangleHeight];
     [self.framingView addConstraint:purpleRectangleRight];
-    [self.framingView addConstraint:purpleRectangleBottom];
+    [self.framingView addConstraint:self.purpleRectangleBottom];
     
     // Blue Boxes
     
@@ -180,18 +258,18 @@
                                                                           multiplier:1.0
                                                                             constant:0.0];
     
-    NSLayoutConstraint *blueSquareOneYPosition = [NSLayoutConstraint constraintWithItem:blueSquareOne
+    self.blueSquareOneYPosition = [NSLayoutConstraint constraintWithItem:blueSquareOne
                                                                               attribute:NSLayoutAttributeCenterY
                                                                               relatedBy:NSLayoutRelationEqual
                                                                                  toItem:self.framingView
                                                                               attribute:NSLayoutAttributeCenterY
                                                                              multiplier:1.0
-                                                                               constant:0.0];
+                                                                               constant:0];
     
     [self.framingView addConstraint:blueSquareOneWidth];
     [self.framingView addConstraint:blueSquareOneHeight];
     [self.framingView addConstraint:blueSquareOneXPosition];
-    [self.framingView addConstraint:blueSquareOneYPosition];
+    [self.framingView addConstraint:self.blueSquareOneYPosition];
     
     UIView *blueSquareTwo = [[UIView alloc] initWithFrame:CGRectZero];
     blueSquareTwo.translatesAutoresizingMaskIntoConstraints = NO;
@@ -222,7 +300,7 @@
                                                                              multiplier:1.0
                                                                                constant:0.0];
     
-    NSLayoutConstraint *blueSquareTwoYPosition = [NSLayoutConstraint constraintWithItem:blueSquareTwo
+    self.blueSquareTwoYPosition = [NSLayoutConstraint constraintWithItem:blueSquareTwo
                                                                               attribute:NSLayoutAttributeCenterY
                                                                               relatedBy:NSLayoutRelationEqual
                                                                                  toItem:self.framingView
@@ -232,9 +310,9 @@
     [self.framingView addConstraint:blueSquareTwoWidth];
     [self.framingView addConstraint:blueSquareTwoHeight];
     [self.framingView addConstraint:blueSquareTwoXPosition];
-    [self.framingView addConstraint:blueSquareTwoYPosition];
+    [self.framingView addConstraint:self.blueSquareTwoYPosition];
     
-    UIView *blueSquareThree = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+    UIView *blueSquareThree = [[UIView alloc] initWithFrame:CGRectZero];
     blueSquareThree.translatesAutoresizingMaskIntoConstraints = NO;
     blueSquareThree.backgroundColor = [UIColor blueColor];
     [self.framingView addSubview:blueSquareThree];
@@ -263,7 +341,7 @@
                                                                              multiplier:1.0
                                                                                constant:0.0];
     
-    NSLayoutConstraint *blueSquareThreeYPosition = [NSLayoutConstraint constraintWithItem:blueSquareThree
+    self.blueSquareThreeYPosition = [NSLayoutConstraint constraintWithItem:blueSquareThree
                                                                               attribute:NSLayoutAttributeCenterY
                                                                               relatedBy:NSLayoutRelationEqual
                                                                                  toItem:self.framingView
@@ -274,7 +352,7 @@
     [self.framingView addConstraint:blueSquareThreeWidth];
     [self.framingView addConstraint:blueSquareThreeHeight];
     [self.framingView addConstraint:blueSquareThreeXPosition];
-    [self.framingView addConstraint:blueSquareThreeYPosition];
+    [self.framingView addConstraint:self.blueSquareThreeYPosition];
     
     // Red box
     
@@ -329,10 +407,10 @@
     NSLayoutConstraint *orangeRectangleOneWidth = [NSLayoutConstraint constraintWithItem:orangeRectangleOne
                                                                          attribute:NSLayoutAttributeWidth
                                                                          relatedBy:NSLayoutRelationEqual
-                                                                            toItem:redRectangle
-                                                                         attribute:NSLayoutAttributeWidth
-                                                                        multiplier:0.47
-                                                                          constant:0];
+                                                                            toItem:nil
+                                                                         attribute:NSLayoutAttributeNotAnAttribute
+                                                                        multiplier:1
+                                                                          constant:70];
     
     NSLayoutConstraint *orangeRectangleOneHeight = [NSLayoutConstraint constraintWithItem:orangeRectangleOne
                                                                           attribute:NSLayoutAttributeHeight
@@ -370,10 +448,10 @@
     NSLayoutConstraint *orangeRectangleTwoWidth = [NSLayoutConstraint constraintWithItem:orangeRectangleTwo
                                                                                attribute:NSLayoutAttributeWidth
                                                                                relatedBy:NSLayoutRelationEqual
-                                                                                  toItem:redRectangle
-                                                                               attribute:NSLayoutAttributeWidth
-                                                                              multiplier:0.33
-                                                                                constant:0];
+                                                                                  toItem:nil
+                                                                               attribute:NSLayoutAttributeNotAnAttribute
+                                                                              multiplier:1
+                                                                                constant:50];
     
     NSLayoutConstraint *orangeRectangleTwoHeight = [NSLayoutConstraint constraintWithItem:orangeRectangleTwo
                                                                                 attribute:NSLayoutAttributeHeight
@@ -428,6 +506,35 @@
     }];
 }
 
-
+- (void)showHideYellowRectangle:(id)sender {
+    if ((self.yellowCounter % 2) == 0) {
+        
+        self.yellowRectangleBottom.constant = 150;
+        self.blueSquareTwoYPosition.constant = 0;
+        self.blueSquareOneYPosition.constant = 0;
+        self.blueSquareThreeYPosition.constant = 0;
+        NSLog(@"Yes");
+//        [self.view layoutIfNeeded];
+        [UIView animateWithDuration:1 animations:^{
+            [self.view layoutIfNeeded];
+        }];
+        self.yellowRectangle.hidden = YES;
+        self.yellowCounter++;
+    } else {
+        
+        
+        self.yellowRectangleBottom.constant = 0;
+        self.blueSquareTwoYPosition.constant = -37.5;
+        self.blueSquareOneYPosition.constant = -75;
+        self.blueSquareThreeYPosition.constant = -112.5;
+        NSLog(@"No");
+//        [self.view layoutIfNeeded];
+        [UIView animateWithDuration:1 animations:^{
+            [self.view layoutIfNeeded];
+        }];
+        self.yellowRectangle.hidden = NO;
+        self.yellowCounter++;
+    }
+}
 
 @end
